@@ -2,7 +2,7 @@ name: release
 on:
   push:
     tags:
-      - release/*
+      - release/*-*
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -11,4 +11,5 @@ jobs:
         uses: actions/checkout@v3
       - name: build
         run: |
-          make build
+          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
