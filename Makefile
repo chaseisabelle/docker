@@ -1,3 +1,10 @@
+.PHONY: target
+target:
+	echo "$input" | grep -oP "(?<=release\/)([a-zA-Z0-9]+)-[0-9]+\.[0-9]+(\.[0-9]+)"
+
+.PHONY: version
+	echo "$input" | grep -oP "(?<=release\/$target-)[0-9]+\.[0-9]+(\.[0-9]+)?"
+
 .PHONY: build
 build:
 	docker build --target "${target}" -t "chaseisabelle/${target}:${version}" .

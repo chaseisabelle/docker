@@ -6,7 +6,7 @@ on:
     tags:
       - release/*-*
 jobs:
-  reelase:
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -15,5 +15,7 @@ jobs:
         run: |
           echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
           echo "Tag name from github.ref_name: ${{  github.ref_name }}"
-          version=$(echo "$GITHUB_REF_NAME" | grep -oP "(?<=protoc-)[0-9]+\.[0-9]+\.[0-9]+")
+          target=$(echo "$GITHUB_REF_NAME" | grep -oP "(?<=release\/)([a-zA-Z0-9]+)-[0-9]+\.[0-9]+(\.[0-9]+)")
+          version=$(echo "$GITHUB_REF_NAME" | grep -oP "(?<=release\/$target-)[0-9]+\.[0-9]+(\.[0-9]+)?")
+          echo $target
           echo $version
