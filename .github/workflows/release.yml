@@ -11,8 +11,14 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-      - name: build
+      - name: initialize
         run: |
           target=$(make target input="$GITHUB_REF_NAME")
           version=$(make version input="$GITHUB_REF_NAME")
           echo releasing "$target-$version" from tag "$GITHUB_REF_NAME"
+      - name: build
+        run: |
+          make build target="$target" version="$version"
+      - name: push
+        run: |
+          make push target="$target" version="$version"
