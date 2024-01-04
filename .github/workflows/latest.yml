@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: generate target
         run: |
-          target=$(make parse-release-target input="$GITHUB_REF_NAME")
+          target=$(make parse-release-target tag="$GITHUB_REF_NAME")
           echo "got target $target from $GITHUB_REF_NAME"
           echo "target=$target" >> $GITHUB_ENV
       - name: build and push
