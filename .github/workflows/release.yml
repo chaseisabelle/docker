@@ -11,16 +11,32 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-      - name: initialize
+#      - name: setup qemu
+#        uses: docker/setup-qemu-action@v3
+#      - name: setup buildx
+#        uses: docker/setup-buildx-action@v3
+      - name: dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: target
         run: |
           target=$(make target input="$GITHUB_REF_NAME")
-          version=$(make version input="$GITHUB_REF_NAME")
           echo "target=$target" >> $GITHUB_ENV
+      - name: version
+        run: |
+          version=$(make version input="$GITHUB_REF_NAME")
           echo "version=$version" >> $GITHUB_ENV
-          echo releasing "$target-$version" from tag "$GITHUB_REF_NAME"
       - name: build
         run: |
           make build target="$target" version="$version"
       - name: push
         run: |
           make push target="$target" version="$version"
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: .
+#          platforms: linux/amd64,linux/arm64
+#          push: true
+#          tags: chaseisabelle/:latest
