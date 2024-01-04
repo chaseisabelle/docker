@@ -24,7 +24,7 @@ build-with-options:
 		.
 
 .PHONY: build-for-local
-build-for-local:
+build-for-local: # @todo fix this nonsense
 	make build-with-options \
 		target="${target}" \
 		version="${version}" \
@@ -36,6 +36,9 @@ tag-and-push-release:
 	git tag "release/${target}-${version}"
 	git push --tags
 
-.PHONY: latest-protoc-version
-latest-protoc-version:
-	docker run --rm chaseisabelle/protoc:latest --version | ggrep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"
+.PHONY: current-protoc-versions
+current-protoc-versions:
+	protoc_version=$(shell docker run --rm --entrypoint=protoc chaseisabelle/protoc:latest --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?") && \
+	echo "protoc version: ${protoc_version}" \
+	gen_go_version=$(shell docker run --rm --entrypoint=protoc-gen-go chaseisabelle/protoc:latest --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?") \
+	echo "protoc-gen-go version: ${gen_go_version}"
