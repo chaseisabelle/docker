@@ -8,7 +8,7 @@ version:
 
 .PHONY: build
 build:
-	docker buildx build --target "${target}" -t "chaseisabelle/${target}:${version}" --platform=linux/amd64,linux/arm64 .
+	docker buildx build --target "${target}" -t "chaseisabelle/${target}:${version}" --platform=linux/amd64,linux/arm64 --push .
 
 .PHONY: push
 push:
