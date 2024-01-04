@@ -1,8 +1,8 @@
 name: latest
 on:
   push:
-    branches:
-      - main
+    tags:
+      - release/*-*
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -18,31 +18,16 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: build and push
+      - name: generate target
+        run: |
+          target=$(make target input="$GITHUB_REF_NAME")
+          echo "target=$target" >> $GITHUB_ENV
+      - name: generate version
         run: |
           version="latest"
-          target="protoc"
-          docker buildx build \
-            --target "${target}" \
-            --tag "chaseisabelle/${target}:${version}" \
-            --platform=linux/amd64,linux/arm64 \
-            --push \
-            .
-          target="sqlboiler"
-          docker buildx build \
-            --target "${target}" \
-            --tag "chaseisabelle/${target}:${version}" \
-            --platform=linux/amd64,linux/arm64 \
-            --push \
-            .
-          target="oapi"
-          docker buildx build \
-            --target "${target}" \
-            --tag "chaseisabelle/${target}:${version}" \
-            --platform=linux/amd64,linux/arm64 \
-            --push \
-            .
-          target="swagger"
+          echo "version=$version" >> $GITHUB_ENV
+      - name: build and push
+        run: |
           docker buildx build \
             --target "${target}" \
             --tag "chaseisabelle/${target}:${version}" \
