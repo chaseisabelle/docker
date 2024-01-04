@@ -1,9 +1,10 @@
 .PHONY: target
 target:
-	echo "$input" | grep -oP "(?<=release\/)([a-zA-Z0-9]+)-[0-9]+\.[0-9]+(\.[0-9]+)"
+	echo "${input}" | docker run --rm ubuntu grep -oP "(?<=release\/)[a-zA-Z0-9-]+"
 
 .PHONY: version
-	echo "$input" | grep -oP "(?<=release\/$target-)[0-9]+\.[0-9]+(\.[0-9]+)?"
+version:
+	echo "${input}" | docker run --rm ubuntu grep -oP "(?<=release\/$target-)[0-9]+\.[0-9]+(\.[0-9]+)?"
 
 .PHONY: build
 build:
