@@ -1,8 +1,6 @@
 name: release
 on:
   push:
-    branches:
-      - release/*-* # @todo remove this after testing
     tags:
       - release/*-*
 jobs:
@@ -30,13 +28,6 @@ jobs:
           echo "version=$version" >> $GITHUB_ENV
       - name: build and push
         run: |
-          docker buildx build \
-            --target "${target}" \
-            --tag "chaseisabelle/${target}:${version}" \
-            --platform=linux/amd64,linux/arm64 \
-            --push \
-            .
-          version="latest"
           docker buildx build \
             --target "${target}" \
             --tag "chaseisabelle/${target}:${version}" \
