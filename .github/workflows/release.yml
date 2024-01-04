@@ -21,10 +21,12 @@ jobs:
       - name: generate target
         run: |
           target=$(make parse-release-target input="$GITHUB_REF_NAME")
+          echo "got target $target from $GITHUB_REF_NAME"
           echo "target=$target" >> $GITHUB_ENV
       - name: generate version
         run: |
           version=$(make parse-release-version input="$GITHUB_REF_NAME")
+          echo "got version $version from $GITHUB_REF_NAME"
           echo "version=$version" >> $GITHUB_ENV
       - name: build and push
         run: |
