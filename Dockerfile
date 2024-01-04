@@ -1,6 +1,5 @@
 ARG GOLANG=1.21
 ARG ALPINE=3.18
-ARG NODE=20
 
 
 FROM golang:${GOLANG}-alpine${ALPINE} AS protoc-builder
@@ -19,7 +18,9 @@ RUN apk add --no-cache protobuf
 
 COPY --from=protoc-builder /go/bin/* /usr/local/bin/
 
-CMD ["protoc", "--help"]
+ENTRYPOINT ["protoc"]
+
+CMD ["--help"]
 
 
 FROM golang:${GOLANG}-alpine${ALPINE} AS sqlboiler-builder
@@ -33,7 +34,9 @@ FROM alpine:${ALPINE} AS sqlboiler
 
 COPY --from=sqlboiler-builder /go/bin/* /usr/local/bin/
 
-CMD ["sqlboiler", "--help"]
+ENTRYPOINT ["sqlboiler"]
+
+CMD ["--help"]
 
 
 FROM golang:${GOLANG}-alpine${ALPINE} AS oapi-builder
@@ -44,7 +47,9 @@ FROM alpine:${ALPINE} AS oapi
 
 COPY --from=oapi-builder /go/bin/* /usr/local/bin/
 
-CMD ["oapi-codegen", "--help"]
+ENTRYPOINT ["oapi-codegen"]
+
+CMD ["--help"]
 
 
 FROM eclipse-temurin AS swagger
@@ -55,4 +60,6 @@ RUN apt-get update -y && \
     apt-get install -y wget && \
     wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.49/swagger-codegen-cli-3.0.49.jar -O /swagger-codegen-cli.jar
 
-CMD ["java", "-jar", "/swagger-codegen-cli.jar", "--help"]
+ENTRYPOINT ["java", "-jar", "/swagger-codegen-cli.jar"]
+
+CMD ["--help"]

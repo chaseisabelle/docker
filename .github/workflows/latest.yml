@@ -22,15 +22,6 @@ jobs:
         run: |
           target=$(make target input="$GITHUB_REF_NAME")
           echo "target=$target" >> $GITHUB_ENV
-      - name: generate version
-        run: |
-          version="latest"
-          echo "version=$version" >> $GITHUB_ENV
       - name: build and push
         run: |
-          docker buildx build \
-            --target "${target}" \
-            --tag "chaseisabelle/${target}:${version}" \
-            --platform=linux/amd64,linux/arm64 \
-            --push \
-            .
+          make publish target="${target}" version="latest"
