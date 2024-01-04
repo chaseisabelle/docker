@@ -33,6 +33,11 @@ build-for-local:
 		options="--output type=tar,dest=tmp/${target}-${version}.tar"
 	docker load --input "tmp/${target}-${version}.tar"
 
+.PHONY: tag-and-push-release
+tag-and-push-release:
+	git tag "release/${target}-${version}"
+	git push --tags
+
 .PHONY: latest-protoc-version
 latest-protoc-version:
 	docker run --rm chaseisabelle/protoc:latest --version | ggrep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"
