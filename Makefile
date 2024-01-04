@@ -1,14 +1,12 @@
-.PHONY: parse-release-tag
-parse-release-tag:
-	@echo "${tag}" | grep -oP "(?<=release\/)([a-zA-Z0-9]+)-[0-9]+(\.[0-9]+)?(\.[0-9]+)?"
-
 .PHONY: parse-release-target
 parse-release-target:
-	@make parse-release-tag tag="${tag}" | grep -oP "[a-zA-Z0-9]+" | head -n 1
+	@echo "${tag}" | grep -oP "(?<=release\/)([a-zA-Z0-9]+)-[0-9]+(\.[0-9]+)?(\.[0-9]+)?" | \
+		grep -oP "[a-zA-Z0-9]+" | head -n 1
 
 .PHONY: parse-release-version
 parse-release-version:
-	@make parse-release-tag tag="${tag}" | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?" | tail -n 1
+	@echo "${tag}" | grep -oP "(?<=release\/)([a-zA-Z0-9]+)-[0-9]+(\.[0-9]+)?(\.[0-9]+)?" | \
+		grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?" | tail -n 1
 
 .PHONY: build-and-push
 build-and-push:
