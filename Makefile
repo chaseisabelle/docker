@@ -38,7 +38,11 @@ tag-and-push-release:
 
 .PHONY: current-protoc-versions
 current-protoc-versions:
-	protoc_version=$(shell docker run --rm --entrypoint=protoc chaseisabelle/protoc:latest --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?") && \
-	echo "protoc version: ${protoc_version}" \
-	gen_go_version=$(shell docker run --rm --entrypoint=protoc-gen-go chaseisabelle/protoc:latest --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?") \
-	echo "protoc-gen-go version: ${gen_go_version}"
+	make build-with-options target=protoc version=local
+	$(eval protoc_version := $(shell docker run --rm --entrypoint=protoc chaseisabelle/protoc:local --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"))
+	@echo $(protoc_version)
+#	docker run --rm --entrypoint=protoc-gen-go chaseisabelle/protoc:local --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"
+#	docker run --rm --entrypoint=protoc-gen-go chaseisabelle/protoc:latest --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"
+#	docker run --rm --entrypoint=protoc-gen-go-grpc chaseisabelle/protoc:local --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"
+#	docker run --rm --entrypoint=protoc-gen-go-grpc chaseisabelle/protoc:latest --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"
+
