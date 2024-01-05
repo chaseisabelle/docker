@@ -36,13 +36,18 @@ tag-and-push-release:
 	git tag "release/${target}-${version}"
 	git push --tags
 
-.PHONY: current-protoc-versions
-current-protoc-versions:
+.PHONY: compare-protoc-versions
+compare-protoc-versions:
 	make build-with-options target=protoc version=local
-	$(eval protoc_version := $(shell docker run --rm --entrypoint=protoc chaseisabelle/protoc:local --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"))
-	@echo $(protoc_version)
-#	docker run --rm --entrypoint=protoc-gen-go chaseisabelle/protoc:local --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"
-#	docker run --rm --entrypoint=protoc-gen-go chaseisabelle/protoc:latest --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"
-#	docker run --rm --entrypoint=protoc-gen-go-grpc chaseisabelle/protoc:local --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"
-#	docker run --rm --entrypoint=protoc-gen-go-grpc chaseisabelle/protoc:latest --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"
-
+	$(eval local_protoc_version := $(shell docker run --rm --entrypoint=protoc chaseisabelle/protoc:local --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"))
+	$(eval latest_protoc_version := $(shell docker run --rm --entrypoint=protoc chaseisabelle/protoc:latest --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"))
+	$(eval local_gengo_version := $(shell docker run --rm --entrypoint=protoc-gen-go chaseisabelle/protoc:local --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"))
+	$(eval latest_gengo_version := $(shell docker run --rm --entrypoint=protoc-gen-go chaseisabelle/protoc:latest --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"))
+	$(eval local_gengogrpc_version := $(shell docker run --rm --entrypoint=protoc-gen-go-grpc chaseisabelle/protoc:local --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"))
+	$(eval latest_gengogrpc_version := $(shell docker run --rm --entrypoint=protoc-gen-go-grpc chaseisabelle/protoc:latest --version | grep -oP "[0-9]+(\.[0-9]+)?(\.[0-9]+)?"))
+	@echo local protoc version: $(local_protoc_version)
+	@echo latest protoc version: $(latest_protoc_version)
+	@echo local gen-go version: $(local_gengo_version)
+	@echo latest gen-go version: $(latest_gengo_version)
+	@echo local gen-go-grpc version: $(local_gengogrpc_version)
+	@echo latest gen-go-grpc version: $(latest_gengogrpc_version)
